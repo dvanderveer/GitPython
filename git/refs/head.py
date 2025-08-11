@@ -17,7 +17,7 @@ from .symbolic import SymbolicReference
 
 # typing ---------------------------------------------------
 
-from typing import Any, Sequence, TYPE_CHECKING, Union
+from typing import Any, Sequence, TYPE_CHECKING, TypeVar, Union
 
 from git.types import Commit_ish, PathLike
 
@@ -25,6 +25,8 @@ if TYPE_CHECKING:
     from git.objects import Commit
     from git.refs import RemoteReference
     from git.repo import Repo
+
+T_Heads = TypeVar("T_Heads", bound="Head")
 
 # -------------------------------------------------------------------
 
@@ -123,6 +125,13 @@ class HEAD(SymbolicReference):
         # END handle exception
 
         return self
+
+    @property
+    def reference(self) -> "Head":
+        """Wrap the parent reference method to change the type hint."""
+        return super().reference
+
+    ref = reference
 
 
 class Head(Reference):
@@ -300,5 +309,12 @@ class Head(Reference):
             this head.
         """
         return self._config_parser(read_only=False)
+
+    @property
+    def reference(self) -> T_Heads:
+        """Wrap the parent reference method to change the type hint."""
+        return super().reference
+
+    ref = reference
 
     # } END configuration

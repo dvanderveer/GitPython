@@ -404,7 +404,7 @@ class SymbolicReference:
     def object(self, object: Union[AnyGitObject, "SymbolicReference", str]) -> "SymbolicReference":
         return self.set_object(object)
 
-    def _get_reference(self) -> "SymbolicReference":
+    def _get_reference(self) -> T_References:
         """
         :return:
             :class:`~git.refs.reference.Reference` object we point to
@@ -502,7 +502,7 @@ class SymbolicReference:
 
     # Aliased reference
     @property
-    def reference(self) -> "SymbolicReference":
+    def reference(self) -> T_References:
         return self._get_reference()
 
     @reference.setter

@@ -9,12 +9,15 @@ from .symbolic import SymbolicReference, T_References
 
 # typing ------------------------------------------------------------------
 
-from typing import Any, Callable, Iterator, TYPE_CHECKING, Type, Union
+from typing import Any, Callable, Iterator, TYPE_CHECKING, Type, TypeVar, Union
 
 from git.types import AnyGitObject, PathLike, _T
 
 if TYPE_CHECKING:
     from git.repo import Repo
+
+# named this way to avoid collision with symbolic.T_References
+T_NonsymbolicReferences = TypeVar("T_NonsymbolicReferences", bound="Reference")
 
 # ------------------------------------------------------------------------------
 
@@ -172,5 +175,12 @@ class Reference(SymbolicReference, LazyMixin, IterableObj):
         """
         tokens = self.path.split("/")
         return "/".join(tokens[3:])
+
+    @property
+    def reference(self) -> T_NonsymbolicReferences:
+        """Wrap the parent reference method to change the type hint."""
+        return super().reference
+
+    ref = reference
 
     # } END remote interface

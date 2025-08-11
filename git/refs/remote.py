@@ -77,3 +77,10 @@ class RemoteReference(Head):
     def create(cls, *args: Any, **kwargs: Any) -> NoReturn:
         """Raise :exc:`TypeError`. Defined so the ``create`` method is disabled."""
         raise TypeError("Cannot explicitly create remote references")
+
+    @property
+    def reference(self) -> "RemoteReference":
+        """Wrap the parent reference method to change the type hint."""
+        return super().reference
+
+    ref = reference
